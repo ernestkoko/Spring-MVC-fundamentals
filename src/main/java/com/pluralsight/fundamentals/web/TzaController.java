@@ -1,14 +1,22 @@
 package com.pluralsight.fundamentals.web;
 
+import com.pluralsight.fundamentals.entity.Ticket;
 import com.pluralsight.fundamentals.service.ApplicationService;
 import com.pluralsight.fundamentals.service.ReleaseService;
 import com.pluralsight.fundamentals.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import java.util.List;
+
+@RestController
+@RequestMapping("/tzar")
 public class TzaController {
     private ApplicationService applicationService;
     private TicketService ticketService;
@@ -36,9 +44,10 @@ public class TzaController {
     }
 
     @GetMapping("/tickets")
-    public String retrieveTickets(Model model){
-        model.addAttribute("tickets", ticketService.listTickets());
-        return "tickets";
+    public ResponseEntity<List<Ticket>> getAllTickets(){
+        List<Ticket> list = ticketService.listTickets();
+
+        return new ResponseEntity<List<Ticket>>(list, HttpStatus.OK);
     }
 
     @GetMapping("/releases")
